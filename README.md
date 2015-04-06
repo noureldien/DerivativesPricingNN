@@ -1,6 +1,6 @@
 # Derivatives Pricing (Neural Networks)
 
-• MATLAB project for discussing pricing the options using non-parametric models
+• MATLAB project for discussing pricing the options using non-parametric models.
 
 • Non-parametric models used are: RBF (Radial Basis Function), MLP (Multi Layer Perceptron) and PPR (Projection Pursuit Regression).
 
