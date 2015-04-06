@@ -1,0 +1,7 @@
+________________________________________________________________________________
+
+Training file train.txt opened with 156 samples and  2 predictor variables (mean=0.010360)
+Test file test.txt opened with 56 samples (mean=0.047175)
+Zeroth order model (y=0.010360) has RMS error=0.041583 on the test set.
+________________________________________________________________________________
+PRPR  terms = 4 failed with status = 7f
