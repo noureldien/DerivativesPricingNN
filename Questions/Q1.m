@@ -146,22 +146,22 @@ clc;
 % boxplot(abs(errorTrainRBF));
 % ylim([0 0.032]);
 % title('RBF Network - BS Model', 'FontSize', 14);
-
+% 
 % figure(1);clf;
 % subplot(1,2,1);
 % hold on;
 % grid on;
 % box on;
 % boxplot(abs(errorTrain));
-% ylim([0 0.032]);
-% title('Training Error', 'FontSize', 14);
+% ylim([0 0.03]);
+% title('RBF Training Error', 'FontSize', 14);
 % subplot(1,2,2);
 % hold on;
 % grid on;
 % box on;
 % boxplot(abs(errorTest));
-% ylim([0 0.032]);
-% title('Test Error', 'FontSize', 14);
+% ylim([0 0.03]);
+% title('RBF Test Error', 'FontSize', 14);
 
 %% plot RBF pricing and it's error in 3D
 % figure(8);clf;
@@ -261,6 +261,55 @@ clc;
 % set(plot_legend, 'FontSize', 12);
 % return;
 
+%% plot SVR pricing and it's error in 3D
+% figure(8);clf;
+% nOption = 10;
+% colormap = lines(10);
+% colorGray = 'none';
+% subplot(1,2,1);
+% plotData = zeros(0, 3);
+% for i=1:nOption/2
+%     plotData = [plotData; sxTrain(:,i), ttmTrain, cxTrainSVR(:,i)];
+% end
+% hold all;
+% plot_tri = delaunay(plotData(:,1), plotData(:,2));
+% plot_fill = trisurf(plot_tri, plotData(:,1), plotData(:,2), plotData(:,3), 'EdgeColor', colorGray, 'FaceColor', 'k');
+% alpha(plot_fill, 0.25);
+% plots = zeros(nOption/2, 1);
+% for i=1:nOption/2
+%     plots(i) = plot3(sxTrain(:,i), ttmTrain, cxTrainSVR(:,i),'o', 'MarkerFaceColor', colormap(i,:), 'Color', 'none', 'MarkerSize', 6);
+% end
+% hold off;
+% grid on;
+% xlabel('S/X', 'FontSize', 18);
+% ylabel('T-t', 'FontSize', 18);
+% zlabel('$\widehat{C}/X$', 'Interpreter','Latex', 'FontSize', 18);
+% title('\textsf{SVR Prices $\widehat{C}/X$}', 'Interpreter','Latex', 'FontSize', 18);
+% plot_legend = legend(plots, {'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'}, 'Location', 'nw');
+% set(plot_legend, 'FontSize', 12);
+% subplot(1,2,2);
+% plotData = zeros(0, 3);
+% for i=1:nOption/2
+%     plotData = [plotData; sxTrain(:,i), ttmTrain, errorTrainSVR(:,i)];
+% end
+% hold all;
+% plot_tri = delaunay(plotData(:,1), plotData(:,2));
+% plot_fill = trisurf(plot_tri, plotData(:,1), plotData(:,2), plotData(:,3), 'EdgeColor', colorGray, 'FaceColor', 'k');
+% alpha(plot_fill, 0.25);
+% plots = zeros(nOption/2, 1);
+% for i=1:nOption/2
+%     plots(i) = plot3(sxTrain(:,i), ttmTrain, errorTrainSVR(:,i),'o', 'MarkerFaceColor', colormap(i,:), 'Color', 'none', 'MarkerSize', 6);
+% end
+% hold off;
+% grid on;
+% xlabel('S/X', 'FontSize', 18);
+% ylabel('T-t', 'FontSize', 18);
+% zlabel('$\widehat{C}/X -C/X$', 'Interpreter','Latex', 'FontSize', 18);
+% title('\textsf{Error $\widehat{C}/X - C/X$}', 'Interpreter','Latex', 'FontSize', 18);
+% plot_legend = legend(plots, {'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'}, 'Location', 'ne');
+% set(plot_legend, 'FontSize', 12);
+% return;
+
 %% plot delta and it's error in 3D
 % colormap = lines(10);
 % figure(9);clf;
@@ -307,7 +356,7 @@ clc;
 % plot_legend = legend(plots, {'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5'}, 'Location', 'ne');
 % set(plot_legend, 'FontSize', 12);
 
-%% draw the prices predicted by all the networks (RBF, MLP, PPR)
+%% draw the prices predicted by all the networks (RBF, MLP, PPR, SVR)
 % for i=1:5
 %     figure(i);clf;
 %     hold on;
@@ -329,22 +378,22 @@ clc;
 % hold on;
 % grid on;
 % box on;
-% boxplot([ mean(abs(errorTrain))', mean(abs(errorTrainMLP))', mean(abs(errorTrainPPR))']);
+% boxplot([ mean(abs(errorTrain))', mean(abs(errorTrainMLP))', mean(abs(errorTrainPPR))', mean(abs(errorTrainSVR))']);
 % ylim([0 0.03]);
-% xlabel('RBF    MLP    PPR', 'FontSize', 14);
+% xlabel('RBF    MLP    PPR    SVR', 'FontSize', 14);
 % ylabel('Absolute Error', 'FontSize', 14);
 % title('Error (Training Data)', 'FontSize', 14);
 % subplot(1,2,2);
 % hold on;
 % grid on;
 % box on;
-% boxplot([ mean(abs(errorTest))', mean(abs(errorTestMLP))', mean(abs(errorTestPPR))']);
+% boxplot([ mean(abs(errorTest))', mean(abs(errorTestMLP))', mean(abs(errorTestPPR))', mean(abs(errorTestSVR))']);
 % ylim([0 0.03]);
-% xlabel('RBF    MLP    PPR', 'FontSize', 14);
+% xlabel('RBF    MLP    PPR    SVR', 'FontSize', 14);
 % ylabel('Absolute Error', 'FontSize', 14);
 % title('Error (Test Data)', 'FontSize', 14);
-
-% colormap = lines(3);
+% 
+% colormap = lines(4);
 % graycolor = 'k';
 % figure(2);clf;
 % subplot(1,2,1);
@@ -357,25 +406,30 @@ clc;
 % plot(mean(abs(errorTrainMLP)), '.', 'MarkerSize', 15, 'Color', colormap(2,:));
 % plot(mean(abs(errorTrainPPR)), '--.', 'LineWidth', 1, 'Color', graycolor);
 % plot(mean(abs(errorTrainPPR)), '.', 'MarkerSize', 15, 'Color', colormap(3,:));
-% plot1 = plot(5, '.', 'MarkerSize', 30, 'Color', colormap(1,:));
-% plot2 = plot(5, '.', 'MarkerSize', 30, 'Color', colormap(2,:));
-% plot3 = plot(5, '.', 'MarkerSize', 30, 'Color', colormap(3,:));
+% plot(mean(abs(errorTrainSVR)), '--.', 'LineWidth', 1, 'Color', graycolor);
+% plot(mean(abs(errorTrainSVR)), '.', 'MarkerSize', 15, 'Color', colormap(4,:));
+% plot1 = plot(5, '^', 'LineWidth', 1, 'MarkerFaceColor', colormap(1,:), 'MarkerEdgeColor', 'k', 'MarkerSize', 10);
+% plot2 = plot(5, '*', 'LineWidth', 2, 'MarkerFaceColor', colormap(2,:), 'MarkerEdgeColor', colormap(2,:), 'MarkerSize', 10);
+% plot3 = plot(5, 's', 'LineWidth', 1, 'MarkerFaceColor', colormap(3,:), 'MarkerEdgeColor', 'k', 'MarkerSize', 10);
+% plot4 = plot(5, 'o', 'LineWidth', 1, 'MarkerFaceColor', colormap(4,:), 'MarkerEdgeColor', 'k', 'MarkerSize', 10);
 % ylim([0 0.03]);
 % xlabel('Call Option', 'FontSize', 14);
 % ylabel('Absolute Error', 'FontSize', 14);
 % title('Error (Training Data)', 'FontSize', 14);
-% fig_legend = legend([plot1, plot2, plot3], {'RBF', 'MLP', 'PPR'}, 'Location', 'northwest');
+% fig_legend = legend([plot1, plot2, plot3, plot4], {'RBF', 'MLP', 'PPR', 'SVR'}, 'Location', 'northwest');
 % set(fig_legend,'FontSize',12);
 % subplot(1,2,2);
 % hold on;
 % grid on;
 % box on;
 % plot(mean(abs(errorTest)), '--.', 'LineWidth', 1, 'Color', graycolor);
-% plot1 = plot(mean(abs(errorTest)), '.', 'MarkerSize', 30, 'Color', colormap(1,:));
+% plot(mean(abs(errorTest)), '^', 'LineWidth', 1, 'MarkerFaceColor', colormap(1,:), 'MarkerEdgeColor', 'k', 'MarkerSize', 10);
 % plot(mean(abs(errorTestMLP)), '--.', 'LineWidth', 1, 'Color', graycolor);
-% plot2 = plot(mean(abs(errorTestMLP)), '.', 'MarkerSize', 30, 'Color', colormap(2,:));
+% plot(mean(abs(errorTestMLP)), '*', 'LineWidth', 2, 'MarkerFaceColor', colormap(2,:), 'MarkerEdgeColor', colormap(2,:), 'MarkerSize', 10);
 % plot(mean(abs(errorTestPPR)), '--.', 'LineWidth', 1, 'Color', graycolor);
-% plot3 = plot(mean(abs(errorTestPPR)), '.', 'MarkerSize', 30, 'Color', colormap(3,:));
+% plot(mean(abs(errorTestPPR)), 's', 'LineWidth', 1, 'MarkerFaceColor', colormap(3,:), 'MarkerEdgeColor', 'k', 'MarkerSize', 10);
+% plot(mean(abs(errorTestSVR)), '--.', 'LineWidth', 1, 'Color', graycolor);
+% plot(mean(abs(errorTestSVR)), 'o', 'LineWidth', 1, 'MarkerFaceColor', colormap(4,:), 'MarkerEdgeColor', 'k', 'MarkerSize', 10);
 % ylim([0 0.03]);
 % xlabel('Call Option', 'FontSize', 14);
 % ylabel('Absolute Error', 'FontSize', 14);
